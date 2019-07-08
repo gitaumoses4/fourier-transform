@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import Fourier from '../../components/Fourier';
 
 class Home extends Component{
+
   render(){
     return (
       <div>
-      This is the home page
+        <Fourier />
       </div>
     );
   }
