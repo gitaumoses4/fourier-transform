@@ -1,15 +1,22 @@
-import {drawCircle} from './util';
+import {drawCircle, dft } from './util';
+import path from './path';
 
 const wave = [];
 let circles = [];
 let pen = {x: 0, y: 0};
 
+const input = [];
+
 export default (p) => {
   const circle = drawCircle(p);
+  const evaluateDft = dft(p);
+
   let time = 0;
   let n = 30;
   let scale = 1;
   let scaleSensitivity = 0.05;
+  let paused = false;
+  let frequencies = [];
 
   const drawCircles = () => {
     p.noFill();
@@ -18,18 +25,26 @@ export default (p) => {
 
     let x = p.width * 0.5;
     let y = p.height * 0.5;
-    let radius = 200;
-    for (let i = 1; i < n; i += 2) {
-      radius = 200 * 4 / (i * p.PI);
-      const end = circle({x, y, radius, frequency: i, time, phase: 0, draw: false});
-      circles.push({center: {x, y}, radius, arrow: {...end}, frequency: i, phase: 0});
+
+    frequencies = evaluateDft(path.map(({y}) => y), 0.1);
+
+    circles = frequencies.map(({ frequency, amplitude, phase}) => {
+      const end = circle({x, y, radius: amplitude, frequency, time, phase, draw: false});
+      const result = {
+        center: { x, y },
+        radius : amplitude,
+        arrow: {...end},
+        frequency,
+        phase
+      };
       x = end.x;
       y = end.y;
-    }
+      return result;
+    });
     const result = circles[circles.length - 1].arrow;
 
     wave.unshift(result);
-    if (scale < 2) {
+    if (scale === 1) {
       pen = {x: 0, y: 0};
     } else {
       pen = {x: result.x, y: result.y};
@@ -44,6 +59,11 @@ export default (p) => {
       wave.pop();
     }
   };
+
+  p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
+
+  };
+
 
   const drawWave = (start, ...stroke) => {
     p.stroke(stroke);
@@ -72,6 +92,7 @@ export default (p) => {
 
   p.setup = () => {
     p.createCanvas(1500, 900);
+    console.log(evaluateDft(path.map(({y}) => y)), 1);
   };
 
   p.draw = () => {
@@ -80,9 +101,14 @@ export default (p) => {
     p.strokeWeight(1 / scale);
     p.background(0);
     drawCircles();
-    drawPath('#FF5722');
+    drawWave(p.width / 2 + 200, '#FF5722');
+    drawPath('#5cff4a');
 
-    time += (1 / scale);
+    if( !paused ){
+      let dt = p.TWO_PI / frequencies.length;
+      // let dt = 1;
+      time += (dt / scale);
+    }
   };
 
   p.keyPressed = () => {
@@ -90,11 +116,13 @@ export default (p) => {
       n *= 2;
     } else if (p.key === 'ArrowDown') {
       n /= 2;
+    } else if(p.key === ' '){
+      paused = !paused;
     }
   };
 
   p.mouseWheel = (e) => {
     scale += scaleSensitivity * -e.delta;
-    scale = p.constrain(scale, 1, 30);
+    scale = p.constrain(scale, 1, 1000);
   };
 };
