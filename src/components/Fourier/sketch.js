@@ -1,5 +1,8 @@
 import {drawCircle, dft } from './util';
-import path from './path';
+import valuePath from './path';
+
+// let path = [100, 100, 100, -100, -100, -100, 100, 100, 100, -100, -100, -100];
+const path = valuePath;
 
 const wave = [];
 let circles = [];
@@ -8,7 +11,7 @@ let pen = {x: 0, y: 0};
 const input = [];
 
 export default (p) => {
-  const circle = drawCircle(p);
+  const circle = drawCircle(p, 1);
   const evaluateDft = dft(p);
 
   let time = 0;
@@ -24,9 +27,9 @@ export default (p) => {
     circles = [];
 
     let x = p.width * 0.5;
-    let y = p.height * 0.5;
+    let y = p.height * 0.2;
 
-    frequencies = evaluateDft(path.map(({y}) => y), 0.1);
+    frequencies = evaluateDft(path, 1);
 
     circles = frequencies.map(({ frequency, amplitude, phase}) => {
       const end = circle({x, y, radius: amplitude, frequency, time, phase, draw: false});
@@ -92,7 +95,8 @@ export default (p) => {
 
   p.setup = () => {
     p.createCanvas(1500, 900);
-    console.log(evaluateDft(path.map(({y}) => y)), 1);
+    console.log(path);
+    console.log(evaluateDft(path, 1));
   };
 
   p.draw = () => {
@@ -101,12 +105,11 @@ export default (p) => {
     p.strokeWeight(1 / scale);
     p.background(0);
     drawCircles();
-    drawWave(p.width / 2 + 200, '#FF5722');
+    // drawWave(p.width / 2 + 200, '#FF5722');
     drawPath('#5cff4a');
 
     if( !paused ){
       let dt = p.TWO_PI / frequencies.length;
-      // let dt = 1;
       time += (dt / scale);
     }
   };
