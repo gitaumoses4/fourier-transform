@@ -1,8 +1,9 @@
-export const dft = (p) => (points, delta, N) => {
+export const dft = (p) => ({points, delta, N , time, speed = 1}) => {
   N = N || points.length;
   return Array(N).fill(0).map((_, k) => {
     const { re: r, im: i } = points.reduce((acc, xn, n) => {
-      const angle = (p.TWO_PI * k * n) / N;
+      let dt = k / N;
+      const angle = p.TWO_PI * n * dt;
       const cos = p.cos(angle);
       const sin = -p.sin(angle);
       return {
@@ -52,4 +53,8 @@ export const drawCircle = (p, speed = 1) => ({x, y, radius: amplitude, frequency
     p.endShape();
   }
   return {x: _x, y: _y};
+};
+
+const readSVG = (svg) => {
+
 };

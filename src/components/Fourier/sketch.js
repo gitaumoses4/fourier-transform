@@ -1,17 +1,20 @@
-import {drawCircle, dft } from './util';
-import valuePath from './path';
+import {drawCircle, dft} from './util';
+import generatedPath from './path';
+
+let path = generatedPath;
 
 // let path = [100, 100, 100, -100, -100, -100, 100, 100, 100, -100, -100, -100];
-const path = valuePath;
 
-const wave = [];
+let wave = [];
 let circles = [];
 let pen = {x: 0, y: 0};
 
 const input = [];
 
 export default (p) => {
-  const circle = drawCircle(p, 1);
+
+  let speed = 1;
+  const circle = drawCircle(p, speed);
   const evaluateDft = dft(p);
 
   let time = 0;
@@ -20,6 +23,7 @@ export default (p) => {
   let scaleSensitivity = 0.05;
   let paused = false;
   let frequencies = [];
+  let shape = [];
 
   const drawCircles = () => {
     p.noFill();
@@ -27,15 +31,15 @@ export default (p) => {
     circles = [];
 
     let x = p.width * 0.5;
-    let y = p.height * 0.2;
+    let y = p.height * 0.5;
 
-    frequencies = evaluateDft(path, 1);
+    frequencies = evaluateDft({points: path, time, delta: 1, speed});
 
-    circles = frequencies.map(({ frequency, amplitude, phase}) => {
+    circles = frequencies.map(({frequency, amplitude, phase}) => {
       const end = circle({x, y, radius: amplitude, frequency, time, phase, draw: false});
       const result = {
-        center: { x, y },
-        radius : amplitude,
+        center: {x, y},
+        radius: amplitude,
         arrow: {...end},
         frequency,
         phase
@@ -47,6 +51,7 @@ export default (p) => {
     const result = circles[circles.length - 1].arrow;
 
     wave.unshift(result);
+
     if (scale === 1) {
       pen = {x: 0, y: 0};
     } else {
@@ -83,6 +88,16 @@ export default (p) => {
     }
   };
 
+  const drawShape = () => {
+    p.stroke('#ff00ee');
+    p.noFill();
+    p.beginShape();
+    shape.forEach(({x, y}, index) => {
+      p.vertex(x - pen.x, y - pen.y);
+    });
+    p.endShape();
+  };
+
   const drawPath = (...stroke) => {
     p.stroke(stroke);
     p.noFill();
@@ -95,8 +110,6 @@ export default (p) => {
 
   p.setup = () => {
     p.createCanvas(1500, 900);
-    console.log(path);
-    console.log(evaluateDft(path, 1));
   };
 
   p.draw = () => {
@@ -107,10 +120,11 @@ export default (p) => {
     drawCircles();
     // drawWave(p.width / 2 + 200, '#FF5722');
     drawPath('#5cff4a');
+    drawShape();
 
-    if( !paused ){
+    if (!paused) {
       let dt = p.TWO_PI / frequencies.length;
-      time += (dt / scale);
+      time += (dt);
     }
   };
 
@@ -119,9 +133,31 @@ export default (p) => {
       n *= 2;
     } else if (p.key === 'ArrowDown') {
       n /= 2;
-    } else if(p.key === ' '){
+    } else if (p.key === ' ') {
       paused = !paused;
     }
+  };
+
+  const addPoint = () => {
+    let point = p.createVector(p.mouseX , p.mouseY);
+    shape.push(point);
+  };
+
+  p.mousePressed = (e) => {
+    shape = [];
+    addPoint();
+  };
+
+
+  p.mouseDragged = (e) => {
+    addPoint();
+  };
+
+  p.mouseReleased = (e) => {
+    addPoint();
+    path = shape;
+    wave = [];
+    shape = [];
   };
 
   p.mouseWheel = (e) => {
