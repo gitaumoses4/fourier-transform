@@ -1,4 +1,6 @@
 import codingtrain from './codingtrain';
+import travela from './travela';
+import moses from './moses';
 
 const circle = () => {
   let n = 2;
@@ -13,6 +15,16 @@ const circle = () => {
     return result;
   });
 };
+
+export const generatePath = (drawing, threshold = 10) => {
+  return drawing.reduce((acc, cur, index) => {
+    if (index % threshold === 0) {
+      return [...acc, cur];
+    }
+    return acc;
+  }, []);
+};
+
 const codingTrain = () => {
   return codingtrain.drawing.reduce((acc, cur, index) => {
     if (index % 10 === 0) {
@@ -20,6 +32,14 @@ const codingTrain = () => {
     }
     return acc;
   }, []);
+};
+
+const travelaDrawing = () => {
+  return generatePath(travela, 5);
+};
+
+const mosesDrawing = () => {
+  return generatePath(moses, 5);
 };
 
 const m = () => {
@@ -49,4 +69,4 @@ const square = () => {
   ];
 };
 
-export default m();
+export default mosesDrawing();

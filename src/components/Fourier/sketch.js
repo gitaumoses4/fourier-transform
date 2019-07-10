@@ -1,5 +1,5 @@
 import {drawCircle, dft} from './util';
-import generatedPath from './path';
+import generatedPath, { generatePath } from './path';
 
 let path = generatedPath;
 
@@ -30,10 +30,10 @@ export default (p) => {
     p.stroke(255);
     circles = [];
 
-    let x = p.width * 0.5;
-    let y = p.height * 0.5;
+    let x = p.width * 0.3;
+    let y = p.height * 0.3;
 
-    frequencies = evaluateDft({points: path, time, delta: 1, speed});
+    frequencies = evaluateDft({points: path, time, delta: scale * 0.5, speed});
 
     circles = frequencies.map(({frequency, amplitude, phase}) => {
       const end = circle({x, y, radius: amplitude, frequency, time, phase, draw: false});
@@ -52,10 +52,11 @@ export default (p) => {
 
     wave.unshift(result);
 
+    pen = {x: 0, y: 0};
     if (scale === 1) {
       pen = {x: 0, y: 0};
     } else {
-      pen = {x: result.x, y: result.y};
+      // pen = {x: result.x, y: result.y};
     }
 
     circles.forEach(({center, arrow, radius, frequency, phase}) => {
@@ -68,8 +69,12 @@ export default (p) => {
     }
   };
 
-  p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
-
+  p.myCustomRedrawAccordingToNewPropsHandler = ({ points }) => {
+    if( points.length ){
+      path = generatePath(points, 20);
+      wave = [];
+      time = 0;
+    }
   };
 
 
@@ -119,7 +124,7 @@ export default (p) => {
     p.background(0);
     drawCircles();
     // drawWave(p.width / 2 + 200, '#FF5722');
-    drawPath('#5cff4a');
+    drawPath('#3b79cc');
     drawShape();
 
     if (!paused) {
