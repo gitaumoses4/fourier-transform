@@ -30,10 +30,10 @@ export default (p) => {
     p.stroke(255);
     circles = [];
 
-    let x = p.width * 0.3;
-    let y = p.height * 0.3;
+    let x = p.width * 0.25;
+    let y = p.height * 0.15;
 
-    frequencies = evaluateDft({points: path, time, delta: scale * 0.5, speed});
+    frequencies = evaluateDft({points: path, time, delta: scale, speed});
 
     circles = frequencies.map(({frequency, amplitude, phase}) => {
       const end = circle({x, y, radius: amplitude, frequency, time, phase, draw: false});
@@ -130,6 +130,11 @@ export default (p) => {
     if (!paused) {
       let dt = p.TWO_PI / frequencies.length;
       time += (dt);
+    }
+
+    if( time >= p.TWO_PI){
+      time = 0;
+      wave = [];
     }
   };
 

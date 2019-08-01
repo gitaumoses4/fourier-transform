@@ -37,10 +37,6 @@ const Fourier = (props) => {
       <div className="canvas">
         <P5Wrapper sketch={sketch} points={points} />
       </div>
-      <div className="form">
-        <input type="file" accept="image/svg" onChange={onChange} />
-        <div dangerouslySetInnerHTML={{ __html: image }} />
-      </div>
     </div>
   );
 };

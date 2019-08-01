@@ -54,7 +54,3 @@ export const drawCircle = (p, speed = 1) => ({x, y, radius: amplitude, frequency
   }
   return {x: _x, y: _y};
 };
-
-const readSVG = (svg) => {
-
-};

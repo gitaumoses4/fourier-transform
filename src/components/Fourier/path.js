@@ -1,6 +1,7 @@
 import codingtrain from './codingtrain';
 import travela from './travela';
 import moses from './moses';
+import andela from './andela';
 
 const circle = () => {
   let n = 2;
@@ -42,6 +43,10 @@ const mosesDrawing = () => {
   return generatePath(moses, 5);
 };
 
+const andelaDrawing = () => {
+  return generatePath(andela, 10);
+};
+
 const m = () => {
   return [
     {x: 0, y: 0},
@@ -69,4 +74,4 @@ const square = () => {
   ];
 };
 
-export default mosesDrawing();
+export default andelaDrawing();
