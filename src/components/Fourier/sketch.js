@@ -105,6 +105,7 @@ export default (p) => {
 
   const drawPath = (...stroke) => {
     p.stroke(stroke);
+    p.strokeWeight(3);
     p.noFill();
     p.beginShape();
     wave.forEach(({x, y}, index) => {
@@ -138,40 +139,40 @@ export default (p) => {
     }
   };
 
-  p.keyPressed = () => {
-    if (p.key === 'ArrowUp') {
-      n *= 2;
-    } else if (p.key === 'ArrowDown') {
-      n /= 2;
-    } else if (p.key === ' ') {
-      paused = !paused;
-    }
-  };
+  // p.keyPressed = () => {
+  //   if (p.key === 'ArrowUp') {
+  //     n *= 2;
+  //   } else if (p.key === 'ArrowDown') {
+  //     n /= 2;
+  //   } else if (p.key === ' ') {
+  //     paused = !paused;
+  //   }
+  // };
+  //
+  // const addPoint = () => {
+  //   let point = p.createVector(p.mouseX , p.mouseY);
+  //   shape.push(point);
+  // };
 
-  const addPoint = () => {
-    let point = p.createVector(p.mouseX , p.mouseY);
-    shape.push(point);
-  };
-
-  p.mousePressed = (e) => {
-    shape = [];
-    addPoint();
-  };
-
-
-  p.mouseDragged = (e) => {
-    addPoint();
-  };
-
-  p.mouseReleased = (e) => {
-    addPoint();
-    path = shape;
-    wave = [];
-    shape = [];
-  };
-
-  p.mouseWheel = (e) => {
-    scale += scaleSensitivity * -e.delta;
-    scale = p.constrain(scale, 1, 1000);
-  };
+  // p.mousePressed = (e) => {
+  //   shape = [];
+  //   addPoint();
+  // };
+  //
+  //
+  // p.mouseDragged = (e) => {
+  //   addPoint();
+  // };
+  //
+  // p.mouseReleased = (e) => {
+  //   addPoint();
+  //   path = shape;
+  //   wave = [];
+  //   shape = [];
+  // };
+  //
+  // p.mouseWheel = (e) => {
+  //   scale += scaleSensitivity * -e.delta;
+  //   scale = p.constrain(scale, 1, 1000);
+  // };
 };
