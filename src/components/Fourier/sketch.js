@@ -30,8 +30,8 @@ export default (p) => {
     p.stroke(255);
     circles = [];
 
-    let x = p.width * 0.25;
-    let y = p.height * 0.15;
+    let x = (p.width - 725) / 2;
+    let y = (p.height - 725) / 2;
 
     frequencies = evaluateDft({points: path, time, delta: scale, speed});
 
@@ -52,21 +52,10 @@ export default (p) => {
 
     wave.unshift(result);
 
-    pen = {x: 0, y: 0};
-    if (scale === 1) {
-      pen = {x: 0, y: 0};
-    } else {
-      // pen = {x: result.x, y: result.y};
-    }
-
     circles.forEach(({center, arrow, radius, frequency, phase}) => {
       circle({x: center.x - pen.x, y: center.y - pen.y, radius, frequency, time, phase, scale, draw: true});
     });
 
-
-    if (wave.length > 800) {
-      wave.pop();
-    }
   };
 
   p.myCustomRedrawAccordingToNewPropsHandler = ({ points }) => {
@@ -115,7 +104,8 @@ export default (p) => {
   };
 
   p.setup = () => {
-    p.createCanvas(1500, 900);
+    p.createCanvas(window.innerWidth, window.innerHeight);
+    p.frameRate(20);
   };
 
   p.draw = () => {
@@ -138,41 +128,4 @@ export default (p) => {
       wave = [];
     }
   };
-
-  // p.keyPressed = () => {
-  //   if (p.key === 'ArrowUp') {
-  //     n *= 2;
-  //   } else if (p.key === 'ArrowDown') {
-  //     n /= 2;
-  //   } else if (p.key === ' ') {
-  //     paused = !paused;
-  //   }
-  // };
-  //
-  // const addPoint = () => {
-  //   let point = p.createVector(p.mouseX , p.mouseY);
-  //   shape.push(point);
-  // };
-
-  // p.mousePressed = (e) => {
-  //   shape = [];
-  //   addPoint();
-  // };
-  //
-  //
-  // p.mouseDragged = (e) => {
-  //   addPoint();
-  // };
-  //
-  // p.mouseReleased = (e) => {
-  //   addPoint();
-  //   path = shape;
-  //   wave = [];
-  //   shape = [];
-  // };
-  //
-  // p.mouseWheel = (e) => {
-  //   scale += scaleSensitivity * -e.delta;
-  //   scale = p.constrain(scale, 1, 1000);
-  // };
 };
