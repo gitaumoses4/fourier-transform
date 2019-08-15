@@ -1,31 +1,63 @@
-export const dft = (p) => ({points, delta, N , time, speed = 1}) => {
+export const dft = (p) => ({points, N , time, speed = 1, width, height}) => {
   N = N || points.length;
-  return Array(N).fill(0).map((_, k) => {
-    const { re: r, im: i } = points.reduce((acc, xn, n) => {
-      let dt = k / N;
-      const angle = p.TWO_PI * n * dt;
-      const cos = p.cos(angle);
-      const sin = -p.sin(angle);
-      return {
-        re: acc.re + xn.x * cos - xn.y * sin,
-        im: acc.im + xn.x * sin + xn.y * cos
-      };
-    }, { re: 0, im: 0 });
+  const result = Array(N).fill(0).map((_, k) => {
+    let dt = k / N;
+    let t = 0;
+    const { re: r, im: i } =
+      points.
+        map(point => new Complex(point.x, point.y))
+        .reduce((acc, xn, n) => {
+          const angle =  p.TWO_PI * n * dt;
+          const cos = p.cos(angle);
+          const sin = -p.sin(angle);
 
-    let re = r / N;
-    let im = i / N;
+          t += dt;
+
+          return acc.add(xn.multiply(new Complex(cos, sin)));
+        }, new Complex(0, 0));
+
+    let re = r / Math.max(points.length, N);
+    let im = i / Math.max(points.length, N);
+    const amplitude = p.sqrt( re * re + im * im);
     return {
       frequency: k,
-      re,
-      im,
-      amplitude: p.sqrt( re * re + im * im) * delta,
+      re: re,
+      im: im,
+      amplitude,
       phase: p.atan2(im, re)
     };
-  }).sort((a, b) => b.amplitude - a.amplitude);
+  });
+  const sort = true;
+  return sort ? result.sort((a, b) => b.amplitude - a.amplitude) :result;
+
 };
 
+class Complex {
+  constructor(a, b){
+    this.re = a;
+    this.im = b;
+  }
+
+  multiply(another){
+    return another.constructor === Complex ? new Complex(
+      (this.re * another.re) - (this.im * another.im),
+      (this.re * another.im) + (this.im * another.re)
+    ) : new Complex(
+      this.re * another,
+      this.im * another
+    );
+  }
+
+  add(another){
+    return new Complex(
+      (this.re + another.re),
+      (this.im + another.im)
+    );
+  }
+}
+
 export const drawCircle = (p, speed = 1) => ({x, y, radius: amplitude, frequency, time, phase = 0, draw = true, scale = 1}) => {
-  const angle = phase + (frequency * time / speed);
+  const angle = phase + (frequency * time);
   let _x = amplitude * p.cos(angle) + x;
   let _y = amplitude * p.sin(angle) + y;
 
