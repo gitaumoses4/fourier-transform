@@ -17,13 +17,15 @@ export default (p) => {
   const circle = drawCircle(p, speed);
   const evaluateDft = dft(p);
 
+
   let time = 0;
-  let n = 30;
+  let N = 300;
   let scale = 1;
-  let scaleSensitivity = 0.05;
   let paused = false;
-  let frequencies = [];
+  const frequencies = evaluateDft({points: path, time, N});
   let shape = [];
+
+  const dt = p.TWO_PI / N;
 
   const drawCircles = () => {
     p.noFill();
@@ -33,7 +35,6 @@ export default (p) => {
     let x = p.width * 0.25;
     let y = p.height * 0.15;
 
-    frequencies = evaluateDft({points: path, time, delta: scale, speed});
 
     circles = frequencies.map(({frequency, amplitude, phase}) => {
       const end = circle({x, y, radius: amplitude, frequency, time, phase, draw: false});
@@ -129,50 +130,12 @@ export default (p) => {
     drawShape();
 
     if (!paused) {
-      let dt = p.TWO_PI / frequencies.length;
-      time += (dt);
+      time += (dt * speed);
     }
 
     if( time >= p.TWO_PI){
       time = 0;
-      wave = [];
+      // wave = [];
     }
   };
-
-  // p.keyPressed = () => {
-  //   if (p.key === 'ArrowUp') {
-  //     n *= 2;
-  //   } else if (p.key === 'ArrowDown') {
-  //     n /= 2;
-  //   } else if (p.key === ' ') {
-  //     paused = !paused;
-  //   }
-  // };
-  //
-  // const addPoint = () => {
-  //   let point = p.createVector(p.mouseX , p.mouseY);
-  //   shape.push(point);
-  // };
-
-  // p.mousePressed = (e) => {
-  //   shape = [];
-  //   addPoint();
-  // };
-  //
-  //
-  // p.mouseDragged = (e) => {
-  //   addPoint();
-  // };
-  //
-  // p.mouseReleased = (e) => {
-  //   addPoint();
-  //   path = shape;
-  //   wave = [];
-  //   shape = [];
-  // };
-  //
-  // p.mouseWheel = (e) => {
-  //   scale += scaleSensitivity * -e.delta;
-  //   scale = p.constrain(scale, 1, 1000);
-  // };
 };
