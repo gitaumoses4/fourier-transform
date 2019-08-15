@@ -19,7 +19,7 @@ export default (p) => {
 
 
   let time = 0;
-  let N = 422;
+  let N = path.length;
   let scale = 1;
   let paused = false;
   let shape = [];
@@ -93,15 +93,20 @@ export default (p) => {
     p.endShape();
   };
 
-  const drawPath = (...stroke) => {
-    p.stroke(stroke);
+  const drawPath = () => {
+    let color = [59, 121, 204];
+
+    let prev = {...wave[0]};
     p.strokeWeight(3);
-    p.noFill();
-    p.beginShape();
-    wave.forEach(({x, y}, index) => {
-      p.vertex(x - pen.x, y - pen.y);
-    });
-    p.endShape();
+    p.stroke(...color);
+    for(let i=0;i<wave.length;i++){
+      const cur = wave[i];
+      const strength = (wave.length - i) / wave.length;
+      p.strokeWeight((3 * strength) + 0.5);
+      p.line(prev.x, prev.y, cur.x, cur.y);
+
+      prev = cur;
+    }
   };
 
   p.setup = () => {
@@ -116,7 +121,7 @@ export default (p) => {
     p.background(0);
     drawCircles();
     // drawWave(p.width / 2 + 200, '#FF5722');
-    drawPath('#3b79cc');
+    drawPath();
     drawShape();
 
     if (!paused) {

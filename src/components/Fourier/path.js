@@ -44,7 +44,7 @@ const mosesDrawing = () => {
 };
 
 const andelaDrawing = () => {
-  return generatePath(andela, 15);
+  return generatePath(andela, 10);
 };
 
 const m = () => {
