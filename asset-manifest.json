@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/fourier-transform/static/css/main.97a3668d.chunk.css",
+    "main.js": "/fourier-transform/static/js/main.bc2e5419.chunk.js",
+    "main.js.map": "/fourier-transform/static/js/main.bc2e5419.chunk.js.map",
+    "runtime~main.js": "/fourier-transform/static/js/runtime~main.66739120.js",
+    "runtime~main.js.map": "/fourier-transform/static/js/runtime~main.66739120.js.map",
+    "static/js/2.91a0f59c.chunk.js": "/fourier-transform/static/js/2.91a0f59c.chunk.js",
+    "static/js/2.91a0f59c.chunk.js.map": "/fourier-transform/static/js/2.91a0f59c.chunk.js.map",
+    "index.html": "/fourier-transform/index.html",
+    "precache-manifest.b7d6f2bcdac12373187d7758449e287f.js": "/fourier-transform/precache-manifest.b7d6f2bcdac12373187d7758449e287f.js",
+    "service-worker.js": "/fourier-transform/service-worker.js",
+    "static/css/main.97a3668d.chunk.css.map": "/fourier-transform/static/css/main.97a3668d.chunk.css.map",
+    "static/media/travela.svg": "/fourier-transform/static/media/travela.13f0c849.svg"
+  }
+}
