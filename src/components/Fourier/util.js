@@ -1,13 +1,12 @@
-export const dft = (p) => ({points, N , time, speed = 1, width, height}) => {
+export const dft = (p) => ({points, N , dt, speed = 1, width, height}) => {
   N = N || points.length;
   const result = Array(N).fill(0).map((_, k) => {
-    let dt = k / N;
     let t = 0;
     const { re: r, im: i } =
       points.
         map(point => new Complex(point.x, point.y))
         .reduce((acc, xn, n) => {
-          const angle =  p.TWO_PI * n * dt;
+          const angle =  p.TWO_PI * n * k / N;
           const cos = p.cos(angle);
           const sin = -p.sin(angle);
 
@@ -16,8 +15,8 @@ export const dft = (p) => ({points, N , time, speed = 1, width, height}) => {
           return acc.add(xn.multiply(new Complex(cos, sin)));
         }, new Complex(0, 0));
 
-    let re = r / Math.max(points.length, N);
-    let im = i / Math.max(points.length, N);
+    let re = r / Math.max(N, points.length);
+    let im = i / Math.max(N, points.length);
     const amplitude = p.sqrt( re * re + im * im);
     return {
       frequency: k,
@@ -56,8 +55,9 @@ class Complex {
   }
 }
 
-export const drawCircle = (p, speed = 1) => ({x, y, radius: amplitude, frequency, time, phase = 0, draw = true, scale = 1}) => {
-  const angle = phase + (frequency * time);
+export const drawCircle = (p) => ({x, y, radius, frequency, time, phase = 0, draw = true}) => {
+  let amplitude = radius;
+  const angle = phase + (frequency  * ( time ));
   let _x = amplitude * p.cos(angle) + x;
   let _y = amplitude * p.sin(angle) + y;
 

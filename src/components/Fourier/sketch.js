@@ -19,13 +19,13 @@ export default (p) => {
 
 
   let time = 0;
-  let N = 300;
+  let N = 422;
   let scale = 1;
   let paused = false;
-  const frequencies = evaluateDft({points: path, time, N});
   let shape = [];
-
   const dt = p.TWO_PI / N;
+
+  const frequencies = evaluateDft({points: path, dt, N});
 
   const drawCircles = () => {
     p.noFill();
