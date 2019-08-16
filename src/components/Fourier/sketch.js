@@ -23,9 +23,9 @@ export default (p) => {
   let scale = 1;
   let paused = false;
   let shape = [];
-  const dt = p.TWO_PI / N;
+  const dt = p.TWO_PI / (N / speed);
 
-  const frequencies = evaluateDft({points: path, dt, N});
+  const frequencies = evaluateDft({points: path, speed, dt, N});
 
   const drawCircles = () => {
     p.noFill();
@@ -54,7 +54,16 @@ export default (p) => {
     wave.unshift(result);
 
     circles.forEach(({center, arrow, radius, frequency, phase}) => {
-      circle({x: center.x - pen.x, y: center.y - pen.y, radius, frequency, time, phase, scale, draw: true});
+      circle({
+        x: center.x - pen.x,
+        y: center.y - pen.y,
+        radius,
+        frequency,
+        time,
+        phase,
+        scale,
+        draw: radius > 0.5
+      });
     });
 
     if( time >= p.TWO_PI){
@@ -129,7 +138,7 @@ export default (p) => {
     drawShape();
 
     if (!paused) {
-      time += (dt * speed);
+      time += (dt);
     }
   };
 };
