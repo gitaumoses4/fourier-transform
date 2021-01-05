@@ -4,7 +4,7 @@
   "homepage": "https://gitaumoses4.github.io/fourier-transform/",
   "private": true,
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-loader": "^8.0.5",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-cypress": "^2.2.1",
